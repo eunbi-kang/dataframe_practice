@@ -28,3 +28,5 @@ if __name__ == "__main__":
     print(versicolor_sample2 @ eigenvectors[0]) # versicolor 내적
     print(virginica_sample2 @ eigenvectors[0]) # virginica 내적
 
+
+
