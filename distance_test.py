@@ -1,6 +1,9 @@
 import seaborn as sns
+from scipy.spatial.distance import mahalanobis
 from pandas.core.common import random_state
 import numpy as np
+
+
 
 if __name__ == "__main__":
     # 데이터셋 로드
@@ -37,10 +40,8 @@ if __name__ == "__main__":
     versicolor_mean = versicolor_data.mean(axis=0)
 
 
-
-
     print('setosa:', setosa_mean.values)
-    print('virsicolor:', versicolor_mean.values)
+    print('versicolor:', versicolor_mean.values)
     print('virginica:', virginica_mean.values)
 
     ## ✅마할라노비스 거리 구하기 (2): 공분산 행렬 구하기
@@ -51,7 +52,7 @@ if __name__ == "__main__":
 
     ## ✅마할라노비스 거리 구하기 (3): 공분산 행렬의 역행렬 구하기
     # 역행렬 값 클수록 : 원본행렬 값들이 작거나, 행렬이 특이점에 가깝다는 의미
-    setosa_cov_inv = np.linalg.inv(setosa_cov)
+    setosa_cov_inv = np.linalg.inv(setosa_cov) # setosa행렬의 역행렬
     versicolor_cov_inv = np.linalg.inv(versicolor_cov)
     virginica_cov_inv = np.linalg.inv(virginica_cov)
 
@@ -63,3 +64,7 @@ if __name__ == "__main__":
     d2 = (virginica_sample2.values[0] - virginica_mean.values).T @ virginica_cov_inv @ (
                 virginica_sample2.values[0] - virginica_mean.values)
     print("virginica: ", d2)
+    ## ✅마할라노비스 거리 구하기 (4): 고유값, 고유벡터 구하기 -> pca_practice.py
+    ## ✅마할라노비스 거리 구하기 (5): 마할라노비스 거리 계산 -> mahalanobis()
+    dist = mahalanobis(setosa_data.iloc[0].values, setosa_mean.values, setosa_cov_inv)
+    print("setosa Mahalanobis Distance:", dist)
