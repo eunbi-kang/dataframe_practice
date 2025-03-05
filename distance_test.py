@@ -1,5 +1,6 @@
 import seaborn as sns
 from pandas.core.common import random_state
+import numpy as np
 
 if __name__ == "__main__":
     # 데이터셋 로드
@@ -42,11 +43,23 @@ if __name__ == "__main__":
     print('virsicolor:', versicolor_mean.values)
     print('virginica:', virginica_mean.values)
 
-    ## ✅마할라노비스 거리 구하기 (2): 분산 구하기
-    # @ : 곱하기, T: 역(reverse)
-    print("----------------------------- [setosa] -----------------------------")
-    print(((setosa_data - setosa_mean).T@(setosa_data-setosa_mean)).values)
-    print("--------------------------- [versicolor] ---------------------------")
-    print(((versicolor_data - versicolor_mean).T @ (versicolor_data - versicolor_mean)).values)
-    print("--------------------------- [virginica] ---------------------------")
-    print(((virginica_data - virginica_mean).T @ (virginica_data - virginica_mean)).values)
+    ## ✅마할라노비스 거리 구하기 (2): 공분산 행렬 구하기
+    # @: 곱하기, T: 역(reverse)
+    setosa_cov = ((setosa_data - setosa_mean).T@(setosa_data-setosa_mean)).values
+    versicolor_cov = ((versicolor_data - versicolor_mean).T @ (versicolor_data - versicolor_mean)).values
+    virginica_cov = ((virginica_data - virginica_mean).T @ (virginica_data - virginica_mean)).values
+
+    ## ✅마할라노비스 거리 구하기 (3): 공분산 행렬의 역행렬 구하기
+    # 역행렬 값 클수록 : 원본행렬 값들이 작거나, 행렬이 특이점에 가깝다는 의미
+    setosa_cov_inv = np.linalg.inv(setosa_cov)
+    versicolor_cov_inv = np.linalg.inv(versicolor_cov)
+    virginica_cov_inv = np.linalg.inv(virginica_cov)
+
+    d0 = (setosa_sample2.values[0] - setosa_mean.values).T @ setosa_cov_inv @ (setosa_sample2.values[0] - setosa_mean.values)
+    print("setosa: ", d0)
+    d1 = (versicolor_sample2.values[0] - versicolor_mean.values).T @ versicolor_cov_inv @ (
+                versicolor_sample2.values[0] - versicolor_mean.values)
+    print("versicolor: ", d1)
+    d2 = (virginica_sample2.values[0] - virginica_mean.values).T @ virginica_cov_inv @ (
+                virginica_sample2.values[0] - virginica_mean.values)
+    print("virginica: ", d2)
